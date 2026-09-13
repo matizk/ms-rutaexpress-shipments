@@ -1,4 +1,4 @@
-package cl.duoc.rutaexpress.shipments.domain;
+package duoc.rutaexpress.shipments.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

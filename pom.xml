@@ -8,7 +8,7 @@
 		<version>4.1.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>cl.duoc.rutaexpress</groupId>
+	<groupId>duoc.rutaexpress</groupId>
 	<artifactId>ms-rutaexpress-shipments</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ms-rutaexpress-shipments</name>

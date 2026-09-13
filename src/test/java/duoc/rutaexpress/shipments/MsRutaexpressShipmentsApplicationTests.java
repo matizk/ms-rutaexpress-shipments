@@ -1,4 +1,4 @@
-package cl.duoc.rutaexpress.shipments;
+package duoc.rutaexpress.shipments;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

@@ -1,4 +1,4 @@
-package cl.duoc.rutaexpress.shipments.exception;
+package duoc.rutaexpress.shipments.exception;
 
 import java.util.Map;
 import org.springframework.http.HttpStatus;

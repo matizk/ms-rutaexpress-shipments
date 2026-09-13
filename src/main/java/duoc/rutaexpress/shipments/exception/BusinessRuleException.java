@@ -1,4 +1,4 @@
-package cl.duoc.rutaexpress.shipments.exception;
+package duoc.rutaexpress.shipments.exception;
 
 public class BusinessRuleException extends RuntimeException {
     public BusinessRuleException(String message) { super(message); }

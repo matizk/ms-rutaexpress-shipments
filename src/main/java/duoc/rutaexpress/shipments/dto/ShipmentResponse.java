@@ -1,7 +1,7 @@
-package cl.duoc.rutaexpress.shipments.dto;
+package duoc.rutaexpress.shipments.dto;
 
-import cl.duoc.rutaexpress.shipments.domain.Shipment;
-import cl.duoc.rutaexpress.shipments.domain.ShipmentStatus;
+import duoc.rutaexpress.shipments.domain.Shipment;
+import duoc.rutaexpress.shipments.domain.ShipmentStatus;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 

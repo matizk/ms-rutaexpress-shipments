@@ -1,6 +1,6 @@
-package cl.duoc.rutaexpress.shipments.dto;
+package duoc.rutaexpress.shipments.dto;
 
-import cl.duoc.rutaexpress.shipments.domain.ShipmentStatus;
+import duoc.rutaexpress.shipments.domain.ShipmentStatus;
 import jakarta.validation.constraints.NotNull;
 
 public record ChangeShipmentStatusRequest(

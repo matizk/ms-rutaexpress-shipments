@@ -1,13 +1,13 @@
-package cl.duoc.rutaexpress.shipments.service;
+package duoc.rutaexpress.shipments.service;
 
-import cl.duoc.rutaexpress.shipments.domain.Shipment;
-import cl.duoc.rutaexpress.shipments.domain.ShipmentStatus;
-import cl.duoc.rutaexpress.shipments.dto.ChangeShipmentStatusRequest;
-import cl.duoc.rutaexpress.shipments.dto.CreateShipmentRequest;
-import cl.duoc.rutaexpress.shipments.dto.ShipmentResponse;
-import cl.duoc.rutaexpress.shipments.exception.BusinessRuleException;
-import cl.duoc.rutaexpress.shipments.exception.ResourceNotFoundException;
-import cl.duoc.rutaexpress.shipments.repository.ShipmentRepository;
+import duoc.rutaexpress.shipments.domain.Shipment;
+import duoc.rutaexpress.shipments.domain.ShipmentStatus;
+import duoc.rutaexpress.shipments.dto.ChangeShipmentStatusRequest;
+import duoc.rutaexpress.shipments.dto.CreateShipmentRequest;
+import duoc.rutaexpress.shipments.dto.ShipmentResponse;
+import duoc.rutaexpress.shipments.exception.BusinessRuleException;
+import duoc.rutaexpress.shipments.exception.ResourceNotFoundException;
+import duoc.rutaexpress.shipments.repository.ShipmentRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;

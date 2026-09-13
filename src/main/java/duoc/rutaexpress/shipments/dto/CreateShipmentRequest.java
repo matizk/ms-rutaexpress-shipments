@@ -1,4 +1,4 @@
-package cl.duoc.rutaexpress.shipments.dto;
+package duoc.rutaexpress.shipments.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

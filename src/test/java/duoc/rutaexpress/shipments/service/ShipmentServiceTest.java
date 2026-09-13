@@ -1,4 +1,4 @@
-package cl.duoc.rutaexpress.shipments.service;
+package duoc.rutaexpress.shipments.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -7,13 +7,13 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import cl.duoc.rutaexpress.shipments.domain.Shipment;
-import cl.duoc.rutaexpress.shipments.domain.ShipmentStatus;
-import cl.duoc.rutaexpress.shipments.dto.ChangeShipmentStatusRequest;
-import cl.duoc.rutaexpress.shipments.dto.CreateShipmentRequest;
-import cl.duoc.rutaexpress.shipments.dto.ShipmentResponse;
-import cl.duoc.rutaexpress.shipments.exception.BusinessRuleException;
-import cl.duoc.rutaexpress.shipments.repository.ShipmentRepository;
+import duoc.rutaexpress.shipments.domain.Shipment;
+import duoc.rutaexpress.shipments.domain.ShipmentStatus;
+import duoc.rutaexpress.shipments.dto.ChangeShipmentStatusRequest;
+import duoc.rutaexpress.shipments.dto.CreateShipmentRequest;
+import duoc.rutaexpress.shipments.dto.ShipmentResponse;
+import duoc.rutaexpress.shipments.exception.BusinessRuleException;
+import duoc.rutaexpress.shipments.repository.ShipmentRepository;
 import java.math.BigDecimal;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;

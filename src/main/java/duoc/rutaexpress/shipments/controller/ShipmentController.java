@@ -1,10 +1,10 @@
-package cl.duoc.rutaexpress.shipments.controller;
+package duoc.rutaexpress.shipments.controller;
 
-import cl.duoc.rutaexpress.shipments.domain.ShipmentStatus;
-import cl.duoc.rutaexpress.shipments.dto.ChangeShipmentStatusRequest;
-import cl.duoc.rutaexpress.shipments.dto.CreateShipmentRequest;
-import cl.duoc.rutaexpress.shipments.dto.ShipmentResponse;
-import cl.duoc.rutaexpress.shipments.service.ShipmentService;
+import duoc.rutaexpress.shipments.domain.ShipmentStatus;
+import duoc.rutaexpress.shipments.dto.ChangeShipmentStatusRequest;
+import duoc.rutaexpress.shipments.dto.CreateShipmentRequest;
+import duoc.rutaexpress.shipments.dto.ShipmentResponse;
+import duoc.rutaexpress.shipments.service.ShipmentService;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;

@@ -1,7 +1,7 @@
-package cl.duoc.rutaexpress.shipments.repository;
+package duoc.rutaexpress.shipments.repository;
 
-import cl.duoc.rutaexpress.shipments.domain.Shipment;
-import cl.duoc.rutaexpress.shipments.domain.ShipmentStatus;
+import duoc.rutaexpress.shipments.domain.Shipment;
+import duoc.rutaexpress.shipments.domain.ShipmentStatus;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
