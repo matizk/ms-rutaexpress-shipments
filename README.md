@@ -72,3 +72,19 @@ tabla desde la entidad. En un ambiente compartido o de despliegue se debe ejecut
 `spring.jpa.hibernate.ddl-auto=validate`.
 
 La API queda disponible en `http://localhost:5000`.
+
+## Verificacion de salud
+
+El endpoint `GET /actuator/health` confirma que la aplicacion esta en ejecucion.
+Es el endpoint que usaremos para comprobar el servicio en Docker y posteriormente
+como evidencia de despliegue en AWS:
+
+```powershell
+Invoke-RestMethod http://localhost:5000/actuator/health
+```
+
+La respuesta esperada es:
+
+```json
+{ "status": "UP" }
+```
