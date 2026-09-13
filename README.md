@@ -54,3 +54,21 @@ Las reglas de negocio se prueban sin base de datos con pruebas unitarias de `Shi
 La configuración de Oracle se mantiene fuera de Git. Usar
 `src/main/resources/application-oracle.properties.example` como plantilla para crear
 `application-local.properties` con las credenciales locales.
+
+## Oracle y Docker para desarrollo local
+
+La base de datos local está definida en `compose.local.yml`. Las contraseñas no se
+versionan: primero copia `.env.example` como `.env` y reemplaza sus valores.
+
+Con Docker Desktop instalado, inicia Oracle y el microservicio con:
+
+```powershell
+docker compose -f compose.local.yml up --build
+```
+
+El contenedor de desarrollo usa `spring.jpa.hibernate.ddl-auto=update` para crear la
+tabla desde la entidad. En un ambiente compartido o de despliegue se debe ejecutar
+`database/01-create-shipments.sql` con el usuario `RUTAEXPRESS` y usar
+`spring.jpa.hibernate.ddl-auto=validate`.
+
+La API queda disponible en `http://localhost:5000`.

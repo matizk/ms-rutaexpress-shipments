@@ -1,0 +1,10 @@
+.git
+.idea
+.vscode
+target
+.env
+application-local.properties
+application-local.yml
+application-local.yaml
+README.md
+HELP.md
