@@ -1,0 +1,9 @@
+# Copiar como application-local.properties y completar los valores locales.
+# application-local.properties no se versiona.
+spring.datasource.url=jdbc:oracle:thin:@//localhost:1521/FREEPDB1
+spring.datasource.username=RUTAEXPRESS
+spring.datasource.password=CAMBIAR_EN_LOCAL
+spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+
+spring.jpa.hibernate.ddl-auto=validate
+spring.jpa.open-in-view=false

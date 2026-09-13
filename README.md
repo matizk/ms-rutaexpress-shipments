@@ -19,4 +19,8 @@ La regla de negocio mínima es que un envío no puede pasar a `EN_RUTA` sin habe
 
 ## Estado
 
-Repositorio inicial. No contiene aún código de aplicación ni configuraciones con secretos.
+Base técnica creada con Spring Boot, Java 21, Spring Web, Spring Data JPA, Validation y Oracle Driver.
+
+La configuración de Oracle se mantiene fuera de Git. Usar
+`src/main/resources/application-oracle.properties.example` como plantilla para crear
+`application-local.properties` con las credenciales locales.
