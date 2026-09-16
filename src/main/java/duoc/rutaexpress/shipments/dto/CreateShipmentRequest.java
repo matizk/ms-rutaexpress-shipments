@@ -14,5 +14,7 @@ public record CreateShipmentRequest(
         @NotBlank(message = "La dirección de origen es obligatoria") String direccionOrigen,
         @NotBlank(message = "La dirección de destino es obligatoria") String direccionDestino,
         @NotNull(message = "El peso es obligatorio")
-        @Positive(message = "El peso debe ser mayor que cero") BigDecimal pesoKg) {
+        @Positive(message = "El peso debe ser mayor que cero") BigDecimal pesoKg,
+        @NotNull(message = "Debes seleccionar un servicio")
+        @Positive(message = "El servicio seleccionado no es válido") Long servicioId) {
 }

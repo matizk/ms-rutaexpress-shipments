@@ -7,6 +7,8 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import duoc.rutaexpress.shipments.client.CatalogClient;
+import duoc.rutaexpress.shipments.client.CatalogServiceSnapshot;
 import duoc.rutaexpress.shipments.domain.Shipment;
 import duoc.rutaexpress.shipments.domain.ShipmentStatus;
 import duoc.rutaexpress.shipments.dto.ChangeShipmentStatusRequest;
@@ -29,17 +31,22 @@ class ShipmentServiceTest {
     @Mock
     private ShipmentRepository shipmentRepository;
 
+    @Mock
+    private CatalogClient catalogClient;
+
     private ShipmentService shipmentService;
 
     @BeforeEach
     void setUp() {
-        shipmentService = new ShipmentService(shipmentRepository);
+        shipmentService = new ShipmentService(shipmentRepository, catalogClient);
     }
 
     @Test
     void createsShipmentWithCreatedStatus() {
         CreateShipmentRequest request = validRequest();
         when(shipmentRepository.existsByCodigoSeguimiento(request.codigoSeguimiento())).thenReturn(false);
+        when(catalogClient.reserveCapacity(request.servicioId()))
+                .thenReturn(new CatalogServiceSnapshot(1L, "Express", 4));
         when(shipmentRepository.save(any(Shipment.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         ShipmentResponse response = shipmentService.create(request);
@@ -48,7 +55,9 @@ class ShipmentServiceTest {
         verify(shipmentRepository).save(shipmentCaptor.capture());
         assertEquals(ShipmentStatus.CREADO, shipmentCaptor.getValue().getEstado());
         assertEquals("RX-0001", response.codigoSeguimiento());
+        assertEquals("Express", response.servicioNombre());
         assertEquals(ShipmentStatus.CREADO, response.estado());
+        verify(catalogClient).reserveCapacity(1L);
     }
 
     @Test
@@ -77,12 +86,12 @@ class ShipmentServiceTest {
 
     private CreateShipmentRequest validRequest() {
         return new CreateShipmentRequest("RX-0001", "Ana Pérez", "ana@example.com", "Santiago",
-                "Valparaíso", new BigDecimal("2.50"));
+                "Valparaíso", new BigDecimal("2.50"), 1L);
     }
 
     private Shipment shipmentInStatus(ShipmentStatus status) {
         Shipment shipment = new Shipment("RX-0001", "Ana Pérez", "ana@example.com", "Santiago",
-                "Valparaíso", new BigDecimal("2.50"));
+                "Valparaíso", new BigDecimal("2.50"), 1L, "Express");
         if (status != ShipmentStatus.CREADO) {
             shipment.cambiarEstado(status);
         }

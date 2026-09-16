@@ -39,6 +39,13 @@ public class Shipment {
     @Column(name = "peso_kg", nullable = false, precision = 10, scale = 2)
     private BigDecimal pesoKg;
 
+    // Nullable para conservar los envíos creados antes de integrar Catálogo.
+    @Column(name = "servicio_id")
+    private Long servicioId;
+
+    @Column(name = "servicio_nombre", length = 120)
+    private String servicioNombre;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private ShipmentStatus estado;
@@ -54,13 +61,16 @@ public class Shipment {
     }
 
     public Shipment(String codigoSeguimiento, String nombreDestinatario, String emailDestinatario,
-                    String direccionOrigen, String direccionDestino, BigDecimal pesoKg) {
+                    String direccionOrigen, String direccionDestino, BigDecimal pesoKg,
+                    Long servicioId, String servicioNombre) {
         this.codigoSeguimiento = codigoSeguimiento;
         this.nombreDestinatario = nombreDestinatario;
         this.emailDestinatario = emailDestinatario;
         this.direccionOrigen = direccionOrigen;
         this.direccionDestino = direccionDestino;
         this.pesoKg = pesoKg;
+        this.servicioId = servicioId;
+        this.servicioNombre = servicioNombre;
         this.estado = ShipmentStatus.CREADO;
     }
 
@@ -83,6 +93,8 @@ public class Shipment {
     public String getDireccionOrigen() { return direccionOrigen; }
     public String getDireccionDestino() { return direccionDestino; }
     public BigDecimal getPesoKg() { return pesoKg; }
+    public Long getServicioId() { return servicioId; }
+    public String getServicioNombre() { return servicioNombre; }
     public ShipmentStatus getEstado() { return estado; }
     public LocalDateTime getFechaCreacion() { return fechaCreacion; }
     public LocalDateTime getFechaActualizacion() { return fechaActualizacion; }

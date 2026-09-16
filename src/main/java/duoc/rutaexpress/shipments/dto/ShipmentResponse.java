@@ -13,6 +13,8 @@ public record ShipmentResponse(
         String direccionOrigen,
         String direccionDestino,
         BigDecimal pesoKg,
+        Long servicioId,
+        String servicioNombre,
         ShipmentStatus estado,
         LocalDateTime fechaCreacion,
         LocalDateTime fechaActualizacion) {
@@ -21,6 +23,7 @@ public record ShipmentResponse(
         return new ShipmentResponse(shipment.getId(), shipment.getCodigoSeguimiento(),
                 shipment.getNombreDestinatario(), shipment.getEmailDestinatario(),
                 shipment.getDireccionOrigen(), shipment.getDireccionDestino(), shipment.getPesoKg(),
+                shipment.getServicioId(), shipment.getServicioNombre(),
                 shipment.getEstado(), shipment.getFechaCreacion(), shipment.getFechaActualizacion());
     }
 }

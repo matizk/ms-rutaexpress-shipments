@@ -1,5 +1,7 @@
 package duoc.rutaexpress.shipments.service;
 
+import duoc.rutaexpress.shipments.client.CatalogClient;
+import duoc.rutaexpress.shipments.client.CatalogServiceSnapshot;
 import duoc.rutaexpress.shipments.domain.Shipment;
 import duoc.rutaexpress.shipments.domain.ShipmentStatus;
 import duoc.rutaexpress.shipments.dto.ChangeShipmentStatusRequest;
@@ -24,9 +26,11 @@ public class ShipmentService {
 
     private static final Map<ShipmentStatus, Set<ShipmentStatus>> TRANSICIONES_PERMITIDAS = transicionesPermitidas();
     private final ShipmentRepository shipmentRepository;
+    private final CatalogClient catalogClient;
 
-    public ShipmentService(ShipmentRepository shipmentRepository) {
+    public ShipmentService(ShipmentRepository shipmentRepository, CatalogClient catalogClient) {
         this.shipmentRepository = shipmentRepository;
+        this.catalogClient = catalogClient;
     }
 
     @Transactional
@@ -34,8 +38,10 @@ public class ShipmentService {
         if (shipmentRepository.existsByCodigoSeguimiento(request.codigoSeguimiento())) {
             throw new BusinessRuleException("Ya existe un envío con ese código de seguimiento");
         }
+        CatalogServiceSnapshot service = catalogClient.reserveCapacity(request.servicioId());
         Shipment shipment = new Shipment(request.codigoSeguimiento(), request.nombreDestinatario(),
-                request.emailDestinatario(), request.direccionOrigen(), request.direccionDestino(), request.pesoKg());
+                request.emailDestinatario(), request.direccionOrigen(), request.direccionDestino(), request.pesoKg(),
+                service.id(), service.nombre());
         return ShipmentResponse.from(shipmentRepository.save(shipment));
     }
 

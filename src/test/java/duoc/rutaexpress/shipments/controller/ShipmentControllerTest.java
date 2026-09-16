@@ -39,6 +39,7 @@ class ShipmentControllerTest {
     void returnsShipmentAsJson() throws Exception {
         ShipmentResponse shipment = new ShipmentResponse(1L, "RX-0001", "Ana Pérez",
                 "ana@example.com", "Santiago", "Valparaíso", new BigDecimal("2.50"),
+                1L, "Express",
                 ShipmentStatus.ACEPTADO, LocalDateTime.of(2026, 9, 13, 12, 0),
                 LocalDateTime.of(2026, 9, 13, 12, 5));
         when(shipmentService.findById(1L)).thenReturn(shipment);
