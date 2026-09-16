@@ -7,6 +7,7 @@ import duoc.rutaexpress.shipments.domain.ShipmentStatus;
 import duoc.rutaexpress.shipments.dto.ChangeShipmentStatusRequest;
 import duoc.rutaexpress.shipments.dto.CreateShipmentRequest;
 import duoc.rutaexpress.shipments.dto.ShipmentResponse;
+import duoc.rutaexpress.shipments.dto.PublicTrackingResponse;
 import duoc.rutaexpress.shipments.exception.BusinessRuleException;
 import duoc.rutaexpress.shipments.exception.ResourceNotFoundException;
 import duoc.rutaexpress.shipments.repository.ShipmentRepository;
@@ -17,6 +18,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Locale;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +49,13 @@ public class ShipmentService {
 
     public ShipmentResponse findById(Long id) {
         return ShipmentResponse.from(findEntityById(id));
+    }
+
+    public PublicTrackingResponse track(String codigoSeguimiento) {
+        Shipment shipment = shipmentRepository.findByCodigoSeguimiento(
+                        codigoSeguimiento.trim().toUpperCase(Locale.ROOT))
+                .orElseThrow(() -> new ResourceNotFoundException("No existe un envío con ese código"));
+        return PublicTrackingResponse.from(shipment);
     }
 
     public List<ShipmentResponse> findAll(ShipmentStatus status, LocalDate from, LocalDate to) {

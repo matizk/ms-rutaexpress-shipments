@@ -14,6 +14,7 @@ import duoc.rutaexpress.shipments.domain.ShipmentStatus;
 import duoc.rutaexpress.shipments.dto.ChangeShipmentStatusRequest;
 import duoc.rutaexpress.shipments.dto.CreateShipmentRequest;
 import duoc.rutaexpress.shipments.dto.ShipmentResponse;
+import duoc.rutaexpress.shipments.dto.PublicTrackingResponse;
 import duoc.rutaexpress.shipments.exception.BusinessRuleException;
 import duoc.rutaexpress.shipments.repository.ShipmentRepository;
 import java.math.BigDecimal;
@@ -71,6 +72,18 @@ class ShipmentServiceTest {
 
         assertEquals(ShipmentStatus.ACEPTADO, response.estado());
         verify(shipmentRepository).save(shipment);
+    }
+
+    @Test
+    void tracksShipmentByCodeWithoutExposingRecipientData() {
+        Shipment shipment = shipmentInStatus(ShipmentStatus.EN_RUTA);
+        when(shipmentRepository.findByCodigoSeguimiento("RX-0001")).thenReturn(Optional.of(shipment));
+
+        PublicTrackingResponse response = shipmentService.track(" rx-0001 ");
+
+        assertEquals("RX-0001", response.codigoSeguimiento());
+        assertEquals(ShipmentStatus.EN_RUTA, response.estado());
+        assertEquals("Valparaíso", response.direccionDestino());
     }
 
     @Test

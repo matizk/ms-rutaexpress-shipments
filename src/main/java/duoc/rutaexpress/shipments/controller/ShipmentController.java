@@ -4,6 +4,7 @@ import duoc.rutaexpress.shipments.domain.ShipmentStatus;
 import duoc.rutaexpress.shipments.dto.ChangeShipmentStatusRequest;
 import duoc.rutaexpress.shipments.dto.CreateShipmentRequest;
 import duoc.rutaexpress.shipments.dto.ShipmentResponse;
+import duoc.rutaexpress.shipments.dto.PublicTrackingResponse;
 import duoc.rutaexpress.shipments.service.ShipmentService;
 import jakarta.validation.Valid;
 import java.net.URI;
@@ -38,6 +39,11 @@ public class ShipmentController {
     @GetMapping("/{id}")
     public ShipmentResponse findById(@PathVariable Long id) {
         return shipmentService.findById(id);
+    }
+
+    @GetMapping("/track/{codigoSeguimiento}")
+    public PublicTrackingResponse track(@PathVariable String codigoSeguimiento) {
+        return shipmentService.track(codigoSeguimiento);
     }
 
     @GetMapping

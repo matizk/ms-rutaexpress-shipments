@@ -4,6 +4,7 @@ import duoc.rutaexpress.shipments.domain.Shipment;
 import duoc.rutaexpress.shipments.domain.ShipmentStatus;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,6 +12,8 @@ import org.springframework.data.repository.query.Param;
 public interface ShipmentRepository extends JpaRepository<Shipment, Long> {
 
     boolean existsByCodigoSeguimiento(String codigoSeguimiento);
+
+    Optional<Shipment> findByCodigoSeguimiento(String codigoSeguimiento);
 
     @Query("""
             select shipment from Shipment shipment

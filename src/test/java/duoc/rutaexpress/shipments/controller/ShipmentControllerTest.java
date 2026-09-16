@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import duoc.rutaexpress.shipments.domain.ShipmentStatus;
 import duoc.rutaexpress.shipments.dto.ShipmentResponse;
+import duoc.rutaexpress.shipments.dto.PublicTrackingResponse;
 import duoc.rutaexpress.shipments.service.ShipmentService;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -49,5 +50,18 @@ class ShipmentControllerTest {
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.codigoSeguimiento").value("RX-0001"))
                 .andExpect(jsonPath("$.estado").value("ACEPTADO"));
+    }
+
+    @Test
+    void returnsPublicTrackingAsJson() throws Exception {
+        PublicTrackingResponse tracking = new PublicTrackingResponse("RX-0001", ShipmentStatus.EN_RUTA,
+                "Santiago", "Valparaíso", LocalDateTime.of(2026, 9, 13, 12, 5));
+        when(shipmentService.track("RX-0001")).thenReturn(tracking);
+
+        mockMvc.perform(get("/api/shipments/track/{code}", "RX-0001"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.codigoSeguimiento").value("RX-0001"))
+                .andExpect(jsonPath("$.estado").value("EN_RUTA"))
+                .andExpect(jsonPath("$.direccionDestino").value("Valparaíso"));
     }
 }
