@@ -46,44 +46,44 @@ Para cambiar el estado se envía, por ejemplo, `PUT /api/shipments/1/status`:
 
 ## Estado
 
-Implementado con Spring Boot, Java 21, Spring Web, Spring Data JPA, Validation y Oracle Driver.
-La entidad `Shipment` se persistirá en Oracle mediante JPA cuando esté configurada la base de datos.
+Implementado con Spring Boot, Java 21, Spring Web, Spring Data JPA, Validation y PostgreSQL Driver.
+La entidad `Shipment` se persiste en la base `shipments_db` mediante JPA.
 
 Las reglas de negocio se prueban sin base de datos con pruebas unitarias de `ShipmentService`.
 
-La configuración de Oracle se mantiene fuera de Git. Usar
-`src/main/resources/application-oracle.properties.example` como plantilla para crear
+La configuración de PostgreSQL se mantiene fuera de Git. Usar
+`src/main/resources/application-postgresql.properties.example` como plantilla para crear
 `application-local.properties` con las credenciales locales.
 
-## Oracle y Docker para desarrollo local
+## PostgreSQL y Docker para desarrollo local
 
 La base de datos local está definida en `compose.local.yml`. Las contraseñas no se
-versionan: primero copia `.env.example` como `.env` y reemplaza sus valores.
+versionan: primero copia `.env.example` como `.env` y reemplaza `SHIPMENTS_DB_PASSWORD`.
 
-Con Docker Desktop instalado, inicia Oracle y el microservicio con:
+Con Docker Desktop instalado, inicia PostgreSQL y el microservicio con:
 
 ```powershell
 docker compose -f compose.local.yml up --build
 ```
 
-Para levantar la integración completa de backend en contenedores, desde esta
+Para levantar la integración completa en contenedores, desde esta
 carpeta y con los cinco repositorios ubicados como carpetas hermanas, usa
-`compose.stack.yml`. Primero agrega `ORACLE_PASSWORD`, `APP_USER_PASSWORD`,
+`compose.stack.yml`. Primero agrega `CATALOG_DB_PASSWORD`, `SHIPMENTS_DB_PASSWORD`,
 `COGNITO_ISSUER_URI` y `COGNITO_CLIENT_ID` al `.env`. Luego ejecuta:
 
 ```powershell
 docker compose -f compose.stack.yml up --build
 ```
 
-Este Compose inicia Oracle, Catálogo, Envíos, Reportes, BFF y frontend usando
-nombres de servicio internos (`oracle`, `catalog`, `shipments`, `report`). Detén
+Este Compose inicia PostgreSQL, Catálogo, Envíos, Reportes, BFF y frontend usando
+nombres de servicio internos (`catalog-db`, `shipments-db`, `catalog`, `shipments`, `report`). Detén
 primero los procesos locales que ocupen los puertos 4200, 5000, 8080, 8081 y 8082.
 Los servicios Spring tienen healthchecks en `/actuator/health`, por lo que Compose
 espera a que cada dependencia esté saludable antes de continuar.
 
-El contenedor de desarrollo usa `spring.jpa.hibernate.ddl-auto=update` para crear la
-tabla desde la entidad. En un ambiente compartido o de despliegue se debe ejecutar
-`database/01-create-shipments.sql` con el usuario `RUTAEXPRESS` y usar
+Los contenedores de desarrollo usan `spring.jpa.hibernate.ddl-auto=update` para crear
+las tablas desde las entidades. En un ambiente compartido o de despliegue se debe ejecutar
+`database/01-create-shipments.sql` en `shipments_db` con el usuario `rutaexpress` y usar
 `spring.jpa.hibernate.ddl-auto=validate`.
 
 La API queda disponible en `http://localhost:5000`.

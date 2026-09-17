@@ -1,30 +1,47 @@
 services:
-  oracle:
-    image: gvenzl/oracle-free:slim-faststart
+  catalog-db:
+    image: postgres:16-alpine
     environment:
-      ORACLE_PASSWORD: ${ORACLE_PASSWORD}
-      APP_USER: RUTAEXPRESS
-      APP_USER_PASSWORD: ${APP_USER_PASSWORD}
+      POSTGRES_DB: catalog_db
+      POSTGRES_USER: rutaexpress
+      POSTGRES_PASSWORD: ${CATALOG_DB_PASSWORD}
     ports:
-      - "1521:1521"
+      - "5432:5432"
     volumes:
-      - oracle-stack-data:/opt/oracle/oradata
+      - catalog-db-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "healthcheck.sh"]
+      test: ["CMD-SHELL", "pg_isready -U rutaexpress -d catalog_db"]
       interval: 10s
       timeout: 5s
       retries: 20
-      start_period: 60s
+      start_period: 20s
+
+  shipments-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: shipments_db
+      POSTGRES_USER: rutaexpress
+      POSTGRES_PASSWORD: ${SHIPMENTS_DB_PASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+      - shipments-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rutaexpress -d shipments_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
 
   catalog:
     build:
       context: ../ms-rutaexpress-catalog
     environment:
       SERVER_PORT: 8081
-      SPRING_DATASOURCE_URL: jdbc:oracle:thin:@//oracle:1521/FREEPDB1
-      SPRING_DATASOURCE_USERNAME: RUTAEXPRESS
-      SPRING_DATASOURCE_PASSWORD: ${APP_USER_PASSWORD}
-      SPRING_DATASOURCE_DRIVER_CLASS_NAME: oracle.jdbc.OracleDriver
+      SPRING_DATASOURCE_URL: jdbc:postgresql://catalog-db:5432/catalog_db
+      SPRING_DATASOURCE_USERNAME: rutaexpress
+      SPRING_DATASOURCE_PASSWORD: ${CATALOG_DB_PASSWORD}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       CORS_ALLOWED_ORIGIN: http://localhost:4200
     ports:
       - "8081:8081"
@@ -35,7 +52,7 @@ services:
       retries: 12
       start_period: 20s
     depends_on:
-      oracle:
+      catalog-db:
         condition: service_healthy
 
   shipments:
@@ -43,10 +60,10 @@ services:
       context: .
     environment:
       SERVER_PORT: 5000
-      SPRING_DATASOURCE_URL: jdbc:oracle:thin:@//oracle:1521/FREEPDB1
-      SPRING_DATASOURCE_USERNAME: RUTAEXPRESS
-      SPRING_DATASOURCE_PASSWORD: ${APP_USER_PASSWORD}
-      SPRING_DATASOURCE_DRIVER_CLASS_NAME: oracle.jdbc.OracleDriver
+      SPRING_DATASOURCE_URL: jdbc:postgresql://shipments-db:5432/shipments_db
+      SPRING_DATASOURCE_USERNAME: rutaexpress
+      SPRING_DATASOURCE_PASSWORD: ${SHIPMENTS_DB_PASSWORD}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       CATALOGO_URL: http://catalog:8081
     ports:
@@ -58,7 +75,7 @@ services:
       retries: 12
       start_period: 20s
     depends_on:
-      oracle:
+      shipments-db:
         condition: service_healthy
       catalog:
         condition: service_healthy
@@ -118,4 +135,5 @@ services:
         condition: service_healthy
 
 volumes:
-  oracle-stack-data:
+  catalog-db-data:
+  shipments-db-data:

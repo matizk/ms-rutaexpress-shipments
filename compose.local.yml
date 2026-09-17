@@ -1,38 +1,55 @@
 services:
-  oracle:
-    image: gvenzl/oracle-free:slim-faststart
+  catalog-db:
+    image: postgres:16-alpine
     environment:
-      ORACLE_PASSWORD: ${ORACLE_PASSWORD}
-      APP_USER: RUTAEXPRESS
-      APP_USER_PASSWORD: ${APP_USER_PASSWORD}
+      POSTGRES_DB: catalog_db
+      POSTGRES_USER: rutaexpress
+      POSTGRES_PASSWORD: ${CATALOG_DB_PASSWORD}
     ports:
-      - "1521:1521"
+      - "5432:5432"
     volumes:
-      - oracle-data:/opt/oracle/oradata
+      - catalog-db-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "healthcheck.sh"]
+      test: ["CMD-SHELL", "pg_isready -U rutaexpress -d catalog_db"]
       interval: 10s
       timeout: 5s
       retries: 20
-      start_period: 60s
+      start_period: 20s
+
+  shipments-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: shipments_db
+      POSTGRES_USER: rutaexpress
+      POSTGRES_PASSWORD: ${SHIPMENTS_DB_PASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+      - shipments-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rutaexpress -d shipments_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
 
   shipments:
     build:
       context: .
     environment:
       SERVER_PORT: 5000
-      SPRING_DATASOURCE_URL: jdbc:oracle:thin:@//oracle:1521/FREEPDB1
-      SPRING_DATASOURCE_USERNAME: RUTAEXPRESS
-      SPRING_DATASOURCE_PASSWORD: ${APP_USER_PASSWORD}
-      SPRING_DATASOURCE_DRIVER_CLASS_NAME: oracle.jdbc.OracleDriver
+      SPRING_DATASOURCE_URL: jdbc:postgresql://shipments-db:5432/shipments_db
+      SPRING_DATASOURCE_USERNAME: rutaexpress
+      SPRING_DATASOURCE_PASSWORD: ${SHIPMENTS_DB_PASSWORD}
       # Solo desarrollo local: crea o actualiza la tabla a partir de la entidad JPA.
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_JPA_OPEN_IN_VIEW: "false"
     ports:
       - "5000:5000"
     depends_on:
-      oracle:
+      shipments-db:
         condition: service_healthy
 
 volumes:
-  oracle-data:
+  catalog-db-data:
+  shipments-db-data:
