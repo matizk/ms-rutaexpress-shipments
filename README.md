@@ -85,6 +85,8 @@ Los contenedores de desarrollo usan `spring.jpa.hibernate.ddl-auto=update` para 
 las tablas desde las entidades. En un ambiente compartido o de despliegue se debe ejecutar
 `database/01-create-shipments.sql` en `shipments_db` con el usuario `rutaexpress` y usar
 `spring.jpa.hibernate.ddl-auto=validate`.
+La tabla de usuarios alineada con Cognito está en `database/02-create-users.sql`; se
+debe registrar el `cognito_sub` real después del primer login, sin guardar contraseñas.
 
 La API queda disponible en `http://localhost:5000`.
 
