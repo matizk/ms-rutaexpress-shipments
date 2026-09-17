@@ -1,0 +1,88 @@
+services:
+  oracle:
+    image: gvenzl/oracle-free:slim-faststart
+    environment:
+      ORACLE_PASSWORD: ${ORACLE_PASSWORD}
+      APP_USER: RUTAEXPRESS
+      APP_USER_PASSWORD: ${APP_USER_PASSWORD}
+    ports:
+      - "1521:1521"
+    volumes:
+      - oracle-stack-data:/opt/oracle/oradata
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
+
+  catalog:
+    build:
+      context: ../ms-rutaexpress-catalog
+    environment:
+      SERVER_PORT: 8081
+      SPRING_DATASOURCE_URL: jdbc:oracle:thin:@//oracle:1521/FREEPDB1
+      SPRING_DATASOURCE_USERNAME: RUTAEXPRESS
+      SPRING_DATASOURCE_PASSWORD: ${APP_USER_PASSWORD}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: oracle.jdbc.OracleDriver
+      CORS_ALLOWED_ORIGIN: http://localhost:4200
+    ports:
+      - "8081:8081"
+    depends_on:
+      oracle:
+        condition: service_healthy
+
+  shipments:
+    build:
+      context: .
+    environment:
+      SERVER_PORT: 5000
+      SPRING_DATASOURCE_URL: jdbc:oracle:thin:@//oracle:1521/FREEPDB1
+      SPRING_DATASOURCE_USERNAME: RUTAEXPRESS
+      SPRING_DATASOURCE_PASSWORD: ${APP_USER_PASSWORD}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: oracle.jdbc.OracleDriver
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      CATALOGO_URL: http://catalog:8081
+    ports:
+      - "5000:5000"
+    depends_on:
+      oracle:
+        condition: service_healthy
+      catalog:
+        condition: service_started
+
+  report:
+    build:
+      context: ../ms-rutaexpress-report
+    environment:
+      SERVER_PORT: 8082
+      SHIPMENTS_URL: http://shipments:5000
+    ports:
+      - "8082:8082"
+    depends_on:
+      shipments:
+        condition: service_started
+
+  bff:
+    build:
+      context: ../ms-rutaexpress-bff
+    environment:
+      SERVER_PORT: 8080
+      COGNITO_ISSUER_URI: ${COGNITO_ISSUER_URI}
+      COGNITO_CLIENT_ID: ${COGNITO_CLIENT_ID}
+      CATALOGO_URL: http://catalog:8081
+      SHIPMENTS_URL: http://shipments:5000
+      REPORT_URL: http://report:8082
+      CORS_ALLOWED_ORIGIN: http://localhost:4200
+    ports:
+      - "8080:8080"
+    depends_on:
+      catalog:
+        condition: service_started
+      shipments:
+        condition: service_started
+      report:
+        condition: service_started
+
+volumes:
+  oracle-stack-data:

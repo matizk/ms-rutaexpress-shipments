@@ -66,6 +66,19 @@ Con Docker Desktop instalado, inicia Oracle y el microservicio con:
 docker compose -f compose.local.yml up --build
 ```
 
+Para levantar la integración completa de backend en contenedores, desde esta
+carpeta y con los cinco repositorios ubicados como carpetas hermanas, usa
+`compose.stack.yml`. Primero agrega `ORACLE_PASSWORD`, `APP_USER_PASSWORD`,
+`COGNITO_ISSUER_URI` y `COGNITO_CLIENT_ID` al `.env`. Luego ejecuta:
+
+```powershell
+docker compose -f compose.stack.yml up --build
+```
+
+Este Compose inicia Oracle, Catálogo, Envíos, Reportes y BFF usando nombres de
+servicio internos (`oracle`, `catalog`, `shipments`, `report`). Detén primero
+los procesos Maven locales que ocupen los puertos 5000, 8080, 8081 y 8082.
+
 El contenedor de desarrollo usa `spring.jpa.hibernate.ddl-auto=update` para crear la
 tabla desde la entidad. En un ambiente compartido o de despliegue se debe ejecutar
 `database/01-create-shipments.sql` con el usuario `RUTAEXPRESS` y usar
