@@ -19,8 +19,9 @@ public class UsuarioService {
 
     @Transactional
     public UserResponse create(CreateUserRequest request) {
-        if (usuarioRepository.existsByCognitoSub(request.cognitoSub())) {
-            throw new BusinessRuleException("Ya existe un usuario con ese cognito_sub");
+        var existing = usuarioRepository.findByCognitoSub(request.cognitoSub());
+        if (existing.isPresent()) {
+            return UserResponse.from(existing.get());
         }
         if (usuarioRepository.existsByEmail(request.email())) {
             throw new BusinessRuleException("Ya existe un usuario con ese correo");
