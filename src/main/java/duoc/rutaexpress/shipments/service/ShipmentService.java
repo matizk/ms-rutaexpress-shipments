@@ -20,6 +20,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Locale;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -61,7 +63,19 @@ public class ShipmentService {
     public List<ShipmentResponse> findAll(ShipmentStatus status, LocalDate from, LocalDate to) {
         LocalDateTime fromDateTime = from == null ? null : from.atStartOfDay();
         LocalDateTime toDateTime = to == null ? null : to.atTime(LocalTime.MAX);
-        return shipmentRepository.findByFilters(status, fromDateTime, toDateTime).stream()
+        Specification<Shipment> filters = (root, query, builder) -> builder.conjunction();
+        if (status != null) {
+            filters = filters.and((root, query, builder) -> builder.equal(root.get("estado"), status));
+        }
+        if (fromDateTime != null) {
+            filters = filters.and((root, query, builder) ->
+                    builder.greaterThanOrEqualTo(root.get("fechaCreacion"), fromDateTime));
+        }
+        if (toDateTime != null) {
+            filters = filters.and((root, query, builder) ->
+                    builder.lessThanOrEqualTo(root.get("fechaCreacion"), toDateTime));
+        }
+        return shipmentRepository.findAll(filters, Sort.by(Sort.Direction.DESC, "fechaCreacion")).stream()
                 .map(ShipmentResponse::from).toList();
     }
 

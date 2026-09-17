@@ -6,23 +6,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-public interface ShipmentRepository extends JpaRepository<Shipment, Long> {
+public interface ShipmentRepository extends JpaRepository<Shipment, Long>, JpaSpecificationExecutor<Shipment> {
 
     boolean existsByCodigoSeguimiento(String codigoSeguimiento);
 
     Optional<Shipment> findByCodigoSeguimiento(String codigoSeguimiento);
 
-    @Query("""
-            select shipment from Shipment shipment
-            where (:status is null or shipment.estado = :status)
-              and (:from is null or shipment.fechaCreacion >= :from)
-              and (:to is null or shipment.fechaCreacion <= :to)
-            order by shipment.fechaCreacion desc
-            """)
-    List<Shipment> findByFilters(@Param("status") ShipmentStatus status,
-                                 @Param("from") LocalDateTime from,
-                                 @Param("to") LocalDateTime to);
 }
