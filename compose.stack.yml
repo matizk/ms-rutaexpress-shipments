@@ -43,7 +43,7 @@ services:
       SPRING_DATASOURCE_USERNAME: rutaexpress
       SPRING_DATASOURCE_PASSWORD: ${CATALOG_DB_PASSWORD}
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
-      CORS_ALLOWED_ORIGIN: http://localhost:4200
+      CORS_ALLOWED_ORIGIN: ${FRONTEND_PUBLIC_URL:-http://localhost:4200}
     ports:
       - "8081:8081"
     healthcheck:
@@ -109,7 +109,7 @@ services:
       CATALOGO_URL: http://catalog:8081
       SHIPMENTS_URL: http://shipments:5000
       REPORT_URL: http://report:8082
-      CORS_ALLOWED_ORIGIN: http://localhost:4200
+      CORS_ALLOWED_ORIGIN: ${FRONTEND_PUBLIC_URL:-http://localhost:4200}
     ports:
       - "8080:8080"
     healthcheck:
