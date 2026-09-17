@@ -84,5 +84,14 @@ services:
       report:
         condition: service_started
 
+  frontend:
+    build:
+      context: ../frontend-rutaexpress
+    ports:
+      - "4200:80"
+    depends_on:
+      bff:
+        condition: service_started
+
 volumes:
   oracle-stack-data:

@@ -75,9 +75,9 @@ carpeta y con los cinco repositorios ubicados como carpetas hermanas, usa
 docker compose -f compose.stack.yml up --build
 ```
 
-Este Compose inicia Oracle, Catálogo, Envíos, Reportes y BFF usando nombres de
-servicio internos (`oracle`, `catalog`, `shipments`, `report`). Detén primero
-los procesos Maven locales que ocupen los puertos 5000, 8080, 8081 y 8082.
+Este Compose inicia Oracle, Catálogo, Envíos, Reportes, BFF y frontend usando
+nombres de servicio internos (`oracle`, `catalog`, `shipments`, `report`). Detén
+primero los procesos locales que ocupen los puertos 4200, 5000, 8080, 8081 y 8082.
 
 El contenedor de desarrollo usa `spring.jpa.hibernate.ddl-auto=update` para crear la
 tabla desde la entidad. En un ambiente compartido o de despliegue se debe ejecutar
