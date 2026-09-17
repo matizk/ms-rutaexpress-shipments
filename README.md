@@ -14,9 +14,23 @@ Microservicio de envíos de RutaExpress para la Entrega 1 de DSY1107.
 - `GET /api/shipments/{id}`
 - `PUT /api/shipments/{id}/status`
 - `GET /api/shipments?status=...&from=...&to=...`
+- `POST /api/users` para registrar un usuario de Cognito en la tabla `usuarios`
 
 Los estados permitidos son `CREADO`, `ACEPTADO`, `EN_BODEGA`, `EN_RUTA`,
 `ENTREGADO` y `CANCELADO`.
+
+El registro administrativo de usuario no recibe contraseñas. Ejemplo:
+
+```json
+{
+  "cognitoSub": "sub-real-de-cognito",
+  "email": "usuario@ejemplo.cl",
+  "rut": "12.345.678-9",
+  "nombre": "Nombre",
+  "apellido": "Apellido",
+  "rol": "Admin"
+}
+```
 
 El flujo controlado es:
 
