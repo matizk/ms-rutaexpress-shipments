@@ -28,6 +28,12 @@ services:
       CORS_ALLOWED_ORIGIN: http://localhost:4200
     ports:
       - "8081:8081"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8081/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
     depends_on:
       oracle:
         condition: service_healthy
@@ -45,11 +51,17 @@ services:
       CATALOGO_URL: http://catalog:8081
     ports:
       - "5000:5000"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:5000/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
     depends_on:
       oracle:
         condition: service_healthy
       catalog:
-        condition: service_started
+        condition: service_healthy
 
   report:
     build:
@@ -59,9 +71,15 @@ services:
       SHIPMENTS_URL: http://shipments:5000
     ports:
       - "8082:8082"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8082/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
     depends_on:
       shipments:
-        condition: service_started
+        condition: service_healthy
 
   bff:
     build:
@@ -76,13 +94,19 @@ services:
       CORS_ALLOWED_ORIGIN: http://localhost:4200
     ports:
       - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
     depends_on:
       catalog:
-        condition: service_started
+        condition: service_healthy
       shipments:
-        condition: service_started
+        condition: service_healthy
       report:
-        condition: service_started
+        condition: service_healthy
 
   frontend:
     build:
@@ -91,7 +115,7 @@ services:
       - "4200:80"
     depends_on:
       bff:
-        condition: service_started
+        condition: service_healthy
 
 volumes:
   oracle-stack-data:
